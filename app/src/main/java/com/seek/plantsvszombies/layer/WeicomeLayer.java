@@ -5,6 +5,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.seek.plantsvszombies.utils.CommonUtils;
+
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.actions.instant.CCHide;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -62,7 +64,9 @@ public class WeicomeLayer extends CCLayer {
         CGPoint cgPoint = this.convertTouchToNodeSpace(event);
         CGRect boundingBox = start.getBoundingBox();
         if (CGRect.containsPoint(boundingBox, cgPoint)){
-            Log.i(TAG, "点击开始...");
+//            Log.i(TAG, "点击开始...");
+
+            CommonUtils.changeLayer(new MenuLayer());
         }
         return super.ccTouchesBegan(event);
     }
