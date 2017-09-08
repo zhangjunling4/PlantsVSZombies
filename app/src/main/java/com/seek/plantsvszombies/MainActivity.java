@@ -1,13 +1,16 @@
 package com.seek.plantsvszombies;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.seek.plantsvszombies.layer.WeicomeLayer;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private CCDirector director;
     @Override
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         director.setDeviceOrientation(CCDirector.kCCDeviceOrientationLandscapeLeft);
 
         CCScene scene = CCScene.node();
-
+        scene.addChild(new WeicomeLayer());
 
 
         director.runWithScene(scene);
