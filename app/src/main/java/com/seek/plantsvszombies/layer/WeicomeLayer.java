@@ -27,9 +27,9 @@ import java.util.ArrayList;
  * Created by admin on 2017/9/8.
  */
 
-public class WeicomeLayer extends CCLayer {
+public class WeicomeLayer extends BaseLayer {
     private static final String TAG = WeicomeLayer.class.getSimpleName();
-    private CGSize winSize;
+
     private CCSprite logo;
     private CCSprite start;
 
