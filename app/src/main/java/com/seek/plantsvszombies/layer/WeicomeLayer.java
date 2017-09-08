@@ -1,5 +1,10 @@
 package com.seek.plantsvszombies.layer;
 
+import android.os.AsyncTask;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.MotionEvent;
+
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.actions.instant.CCHide;
 import org.cocos2d.actions.interval.CCAnimate;
@@ -10,6 +15,8 @@ import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
+import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 
 import java.util.ArrayList;
@@ -19,15 +26,49 @@ import java.util.ArrayList;
  */
 
 public class WeicomeLayer extends CCLayer {
-    CGSize winSize;
-    CCSprite logo;
+    private static final String TAG = WeicomeLayer.class.getSimpleName();
+    private CGSize winSize;
+    private CCSprite logo;
+    private CCSprite start;
+
     public WeicomeLayer() {
+
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SystemClock.sleep(6000);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                if (start != null){
+                    start.setVisible(true);
+                    setIsTouchEnabled(true);//打开触摸事件开关
+                }
+
+            }
+        }.execute();
+
         init();
+    }
+
+    @Override
+    public boolean ccTouchesBegan(MotionEvent event) {
+
+        CGPoint cgPoint = this.convertTouchToNodeSpace(event);
+        CGRect boundingBox = start.getBoundingBox();
+        if (CGRect.containsPoint(boundingBox, cgPoint)){
+            Log.i(TAG, "点击开始...");
+        }
+        return super.ccTouchesBegan(event);
     }
 
     private void init() {
         logo();
-
     }
 
     private void logo() {
@@ -78,5 +119,11 @@ public class WeicomeLayer extends CCLayer {
         //序列帧一般必须是永不停止的播放，不需要永不停止播放需要制定第二个参数为false
         CCAnimate animate = CCAnimate.action(anim, false);
         loading.runAction(animate);
+
+        //D:\AndroidPracticeProjects\PlantsVSZombies\app\src\main\assets\image\loading\loading_start.png
+        start = CCSprite.sprite("image/loading/loading_start.png");
+        start.setPosition(winSize.width / 2, 30);
+        start.setVisible(false);
+        this.addChild(start);
     }
 }
