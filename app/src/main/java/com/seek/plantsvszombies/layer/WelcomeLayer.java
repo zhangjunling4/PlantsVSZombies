@@ -2,24 +2,22 @@ package com.seek.plantsvszombies.layer;
 
 import android.os.AsyncTask;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.seek.plantsvszombies.utils.CommonUtils;
 
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.actions.instant.CCHide;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCSequence;
-import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
-import org.cocos2d.types.CGSize;
 
 import java.util.ArrayList;
 
@@ -27,19 +25,19 @@ import java.util.ArrayList;
  * Created by admin on 2017/9/8.
  */
 
-public class WeicomeLayer extends BaseLayer {
-    private static final String TAG = WeicomeLayer.class.getSimpleName();
+public class WelcomeLayer extends BaseLayer {
+    private static final String TAG = WelcomeLayer.class.getSimpleName();
 
     private CCSprite logo;
     private CCSprite start;
 
-    public WeicomeLayer() {
+    public WelcomeLayer() {
 
         new AsyncTask<Void, Void, Void>(){
 
             @Override
             protected Void doInBackground(Void... params) {
-                SystemClock.sleep(6000);
+                SystemClock.sleep(3000);
                 return null;
             }
 
@@ -112,16 +110,17 @@ public class WeicomeLayer extends BaseLayer {
         loading.setPosition(winSize.width / 2, 30);
         this.addChild(loading);
 
-        ArrayList<CCSpriteFrame> frames = new ArrayList<>();
-        String foramt = "image/loading/loading_%02d.png";
-        for (int i=1; i<=9; i++){
-            CCSpriteFrame ccSpriteFrame = CCSprite.sprite(String.format(foramt, i)).displayedFrame();
-            frames.add(ccSpriteFrame);
-        }
-        CCAnimation anim = CCAnimation.animation("loading", 0.2f, frames);
-
-        //序列帧一般必须是永不停止的播放，不需要永不停止播放需要制定第二个参数为false
-        CCAnimate animate = CCAnimate.action(anim, false);
+//        ArrayList<CCSpriteFrame> frames = new ArrayList<>();
+//        String foramt = "image/loading/loading_%02d.png";
+//        for (int i=1; i<=9; i++){
+//            CCSpriteFrame ccSpriteFrame = CCSprite.sprite(String.format(foramt, i)).displayedFrame();
+//            frames.add(ccSpriteFrame);
+//        }
+//        CCAnimation anim = CCAnimation.animation("loading", 0.2f, frames);
+//
+//        //序列帧一般必须是永不停止的播放，不需要永不停止播放需要制定第二个参数为false
+//        CCAnimate animate = CCAnimate.action(anim, false);
+        CCAction animate = CommonUtils.getAnimate("image/loading/loading_%02d.png", 9, false);
         loading.runAction(animate);
 
         //D:\AndroidPracticeProjects\PlantsVSZombies\app\src\main\assets\image\loading\loading_start.png

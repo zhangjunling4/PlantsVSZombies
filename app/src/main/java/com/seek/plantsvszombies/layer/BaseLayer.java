@@ -13,10 +13,7 @@ public class BaseLayer extends CCLayer {
 
     public BaseLayer() {
         winSize = CCDirector.sharedDirector().getWinSize();
-        init();
     }
 
-    private void init() {
 
-    }
 }

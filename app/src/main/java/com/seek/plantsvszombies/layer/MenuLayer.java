@@ -2,6 +2,8 @@ package com.seek.plantsvszombies.layer;
 
 import android.util.Log;
 
+import com.seek.plantsvszombies.utils.CommonUtils;
+
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItem;
@@ -42,6 +44,6 @@ public class MenuLayer extends BaseLayer {
 
     public void click(Object object){
         Log.i(TAG, "开始冒险吧！");
-
+        CommonUtils.changeLayer(new FightLayer());
     }
 }
