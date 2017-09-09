@@ -1,5 +1,6 @@
 package com.seek.plantsvszombies.layer;
 
+import com.seek.plantsvszombies.bean.ShowPlant;
 import com.seek.plantsvszombies.bean.ShowZombies;
 import com.seek.plantsvszombies.utils.CommonUtils;
 
@@ -21,6 +22,10 @@ import java.util.List;
 public class FightLayer extends BaseLayer {
     private CCTMXTiledMap map;
     private CGSize contentSize;
+
+    CCSprite chooesd;
+    CCSprite noChooes;
+
     private List<CGPoint> zombilesPoints;
     public FightLayer() {
         init();
@@ -71,14 +76,33 @@ public class FightLayer extends BaseLayer {
 
     public void loadContaier(){
         //D:\AndroidPracticeProjects\PlantsVSZombies\app\src\main\assets\image\fight\chose\fight_chose.png
-        CCSprite chooesd  = CCSprite.sprite("image/fight/chose/fight_chose.png");
+        chooesd = CCSprite.sprite("image/fight/chose/fight_chose.png");
         chooesd.setAnchorPoint(0, 1);
         chooesd.setPosition(0, winSize.height);
         this.addChild(chooesd);
 
         //D:\AndroidPracticeProjects\PlantsVSZombies\app\src\main\assets\image\fight\chose\fight_choose.png
-        CCSprite noChooes  = CCSprite.sprite("image/fight/chose/fight_choose.png");
+        noChooes = CCSprite.sprite("image/fight/chose/fight_choose.png");
         noChooes.setAnchorPoint(0, 0);
         this.addChild(noChooes);
+
+        loadShowPlant();
+    }
+
+
+    CCSprite showSprite;//获取到展示的精灵
+
+    private void loadShowPlant() {
+        for (int i=1; i<=9; i++){
+            ShowPlant plant = new ShowPlant(i);//创建了展示的而植物
+            CCSprite bgSprite = plant.getBgSprite();
+            bgSprite.setPosition(16 + ((i - 1) %4) * 54, 175 - ((i - 1) / 4 * 59));
+            noChooes.addChild(bgSprite);
+
+            showSprite = plant.getShowSprite();
+            //设置位置
+            showSprite.setPosition(16 + ((i - 1) %4) * 54, 175 - ((i - 1) / 4 * 59));
+            noChooes.addChild(showSprite);//添加到容器上
+        }
     }
 }
