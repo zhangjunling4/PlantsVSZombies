@@ -1,12 +1,16 @@
 package com.seek.plantsvszombies.layer;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.seek.plantsvszombies.bean.ShowPlant;
 import com.seek.plantsvszombies.bean.ShowZombies;
+import com.seek.plantsvszombies.engine.GameController;
 import com.seek.plantsvszombies.utils.CommonUtils;
 
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.actions.interval.CCDelayTime;
 import org.cocos2d.actions.interval.CCMoveBy;
 import org.cocos2d.actions.interval.CCMoveTo;
@@ -41,6 +45,7 @@ public class FightLayer extends BaseLayer {
     private boolean isDelete;//对否删除了植物
 
     private CCSprite startButton;
+    private CCSprite ready;
 
     private List<CGPoint> zombilesPoints;
     public FightLayer() {
@@ -189,23 +194,45 @@ public class FightLayer extends BaseLayer {
      * 点击了“一起来摇滚”
      */
     private void readyFight() {
+        //缩小玩家自己选择植物容器
+        chooesd.setScale(0.65f);
         //把选中的植物重新添加到存在的容器上
         for (ShowPlant plant:selectPlants){
-            plant.getShowSprite().setScale(0.65f);
+            plant.getShowSprite().setScale(0.65f);//父容器缩小了  孩子跟着一起缩小
             plant.getShowSprite().setPosition(plant.getShowSprite().getPosition().x*0.65f,
                     plant.getShowSprite().getPosition().y + (CCDirector.sharedDirector().getWinSize().height -
-                            plant.getShowSprite().getPosition().y) * 0.35f);
+                            plant.getShowSprite().getPosition().y) * 0.35f);//设置坐标
             this.addChild(plant.getShowSprite());
         }
 
         noChooes.removeSelf();
-        map.runAction(CCMoveBy.action(1, ccp((int)(map.getContentSize().width - winSize.width), 0)));
 
-        chooesd.setScale(0.65f);
-
+        map.runAction(CCSequence.actions(
+                CCMoveBy.action(1, ccp((int)(map.getContentSize().width - winSize.width), 0)),
+                CCCallFunc.action(this, "preGame")));
     }
 
     public void unLock(){
         isClick = false;
+    }
+
+    public void preGame(){
+        Log.i(TAG, "准备游戏...");
+        //D:\AndroidPracticeProjects\PlantsVSZombies\app\src\main\assets\image\fight\startready_01.png
+        ready = CCSprite.sprite("image/fight/startready_01.png");
+        ready.setPosition(winSize.width/2, winSize.height/2);
+        this.addChild(ready);
+
+        String format = "image/fight/startready_%02d.png";
+        CCAction animate = CommonUtils.getAnimate(format, 3, false);
+        CCSequence sequence = CCSequence.actions((CCAnimate)animate, CCCallFunc.action(this, "startGame"));
+        ready.runAction(sequence);
+    }
+
+    public void startGame(){
+        ready.removeSelf();//移除中间的序列帧
+
+        GameController gameController = GameController.getInstance();
+        gameController.startGame(map, selectPlants);
     }
 }
